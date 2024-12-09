@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15 # PostgreSQL phiên bản 15
+    container_name: postgres_db # Đặt tên container
+    environment:
+      POSTGRES_USER: ${DATABASE_USER:-admin} # Tên người dùng
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-admin@123} # Mật khẩu
+      POSTGRES_DB: ${DATABASE_DB:-postgres_db} # Tên cơ sở dữ liệu
+    ports:
+      - "${DATABASE_PORT:-5432}:5432" # Liên kết cổng host với container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Lưu dữ liệu lâu dài
+    networks:
+      - postgres_data_network # Thêm vào mạng riêng
+    restart: unless-stopped # Tự động khởi động, trừ khi dừng bằng tay
+
+volumes:
+  postgres_data:
+    # Định nghĩa volume cho PostgreSQL
+
+networks:
+  postgres_data_network:
+    # Định nghĩa mạng
+    driver: bridge
