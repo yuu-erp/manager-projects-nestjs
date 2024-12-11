@@ -14,10 +14,20 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  password     String
+  username     String    @unique
+  isActive     Boolean   @default(false)
+  role         Role      @default(USER)
+  avatar       String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+enum Role {
+  ADMIN
+  USER
+  MODERATOR
 }

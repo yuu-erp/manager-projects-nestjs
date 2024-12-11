@@ -10,7 +10,6 @@ export const correlationMiddleware = (logger: LoggerService) => {
       res.setHeader('correlationId', correlationId)
       logger.correlationId = correlationId
     }
-
     next()
   }
 }

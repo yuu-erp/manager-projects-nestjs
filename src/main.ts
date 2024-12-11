@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { ConfigurationService } from '@/config/configuration.service'
-import { VersioningType } from '@nestjs/common'
+import { ValidationPipe, VersioningType } from '@nestjs/common'
 import { LoggerService } from '@/service/loggerService/logger.service'
 import { correlationMiddleware } from '@/middlewares/correlation.middleware'
 
@@ -17,7 +17,13 @@ async function bootstrap() {
     credentials: true
   })
 
-  app.setGlobalPrefix('api')
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true
+    })
+  )
+
+  app.setGlobalPrefix('api/v1', { exclude: [''] })
   app.enableVersioning({
     type: VersioningType.URI
   })
