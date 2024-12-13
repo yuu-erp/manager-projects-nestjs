@@ -15,19 +15,37 @@ datasource db {
 
 model User {
   id           String    @id @default(uuid())
-  name         String
+  fullName     String
   email        String    @unique
   password     String
   username     String    @unique
-  isActive     Boolean   @default(false)
-  role         Role      @default(USER)
-  avatar       String?
+  isVerify     Boolean   @default(false)
+  role         ROLE_TYPE @default(USER)
+  coverImageId Int?
+  coverImage   Media[]   @relation("owner")
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 }
 
-enum Role {
+model Media {
+  id        Int       @id @default(autoincrement())
+  url       String    
+  type      MEDIA_TYPE
+  userId    String?
+  user      User?     @relation("owner", fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+enum ROLE_TYPE {
   ADMIN
   USER
   MODERATOR
+}
+
+enum MEDIA_TYPE {
+  IMAGE
+  VIDEO
+  AUDIO
+  OTHER
 }
